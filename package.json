@@ -1,0 +1,87 @@
+{
+  "name": "",
+  "version": "1.2.0",
+  "description": "",
+  "author": "",
+  "license": "MIT",
+  "main": "index.js",
+  "babel": {
+    "presets": [
+      "env"
+    ],
+    "env": {
+      "development": {
+        "presets": [
+          "power-assert"
+        ]
+      }
+    }
+  },
+  "browserify": {
+    "transform": [
+      "babelify"
+    ]
+  },
+  "esdoc": {
+    "source": "./src/js",
+    "destination": "./esdoc",
+    "test": {
+      "type": "mocha",
+      "source": "./src/js"
+    }
+  },
+  "config": {
+    "app": "famu_www"
+  },
+  "scripts": {
+    "start": "npm run watch",
+    "esdoc": "esdoc",
+    "icons": "svgo -f ./src/svg -o ./src/svg/svg_min  && svg-sprite-generate -d ./src/svg/svg_min -o ./src/assets/svg/sprite.svg",
+    "build:css": "node-sass --include-path true ./src/sass/ -o ./src/assets/css/",
+    "build:images": "imagemin ./src/img/* -o ./src/assets/img",
+    "build": "npm-run-all -p build:css build:images",
+    
+    "watch:pug": "pug -w ./src/pug/ -P -o ./src/assets/",
+    "watch:css": "node-sass -w --include-path true ./src/sass/ -o ./src/assets/css/",
+    "watch:server": "browser-sync start --server src/assets/ --startPath src/assets/",
+    "watch": "npm-run-all -p watch:pug watch:css watch:server",
+
+    "release:css": "mkdirp ./public/css && node-sass -c ./src/sass/ -o ./public/css --output-style compressed",
+    "release:clean": "rimraf ./public",
+    "release:copy": "cpx \"./src/assets/**/!(*.js|*.css|*.map|_*.html|*.svg)\" ./public",
+    "release": "npm-run-all -s release:clean release:copy -p release:css"
+  },
+  "dependencies": {
+    "jquery": "^3.2.1",
+    "moment": "^2.18.1",
+    "normalize.css": "^7.0.0"
+  },
+  "devDependencies": {
+    "babel-preset-env": "^1.5.2",
+    "babel-preset-power-assert": "^1.0.0",
+    "babel-register": "^6.24.1",
+    "babelify": "^7.3.0",
+    "browser-sync": "^2.18.12",
+    "browserify": "^14.4.0",
+    "clean-css-cli": "^4.1.6",
+    "cpx": "^1.5.0",
+    "cross-conf-env": "^1.1.2",
+    "cross-env": "^5.0.1",
+    "ejs-cli": "^2.0.0",
+    "esdoc": "^0.5.2",
+    "exorcist": "^0.4.0",
+    "imagemin-cli": "^3.0.0",
+    "mkdirp": "^0.5.1",
+    "mocha": "^3.4.2",
+    "node-sass": "^4.5.3",
+    "npm-run-all": "^4.0.2",
+    "power-assert": "^1.4.4",
+    "pug": "^2.0.0-rc.3",
+    "pug-cli": "^1.0.0-alpha6",
+    "rimraf": "^2.6.1",
+    "svg-sprite-generator": "0.0.7",
+    "svgo": "^0.7.2",
+    "uglify-es": "^3.0.15",
+    "watchify": "^3.9.0"
+  }
+}
